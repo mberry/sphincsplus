@@ -6,6 +6,7 @@ This repository contains the software that accompanies the [SPHINCS+ submission]
 ![][test-sha256-avx2]
 ![][test-shake256-avx2]
 ![][test-haraka-aesni]
+![][test-shake256-arm64]
 
 ### Parameters
 
@@ -28,3 +29,4 @@ All included code is available under the CC0 1.0 Universal Public Domain Dedicat
 [test-sha256-avx2]: https://github.com/sphincs/sphincsplus/actions/workflows/test-sha256-avx2.yml/badge.svg
 [test-shake256-avx2]: https://github.com/sphincs/sphincsplus/actions/workflows/test-shake256-avx2.yml/badge.svg
 [test-haraka-aesni]: https://github.com/sphincs/sphincsplus/actions/workflows/test-haraka-aesni.yml/badge.svg
+[test-shake256-arm64]: https://github.com/sphincs/sphincsplus/actions/workflows/test-shake256-a64.yml/badge.svg

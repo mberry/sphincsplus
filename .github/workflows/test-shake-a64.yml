@@ -1,0 +1,50 @@
+name: Tests for shake-arm64 implementation
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        size:
+          - 128
+          - 192
+          - 256
+        option:
+          - s
+          - f
+        thash:
+          - simple
+          - robust
+          
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up QEMU
+      run: sudo apt-get install qemu-user-static
+
+    - name: Set up ARM environment
+      run: |
+        sudo update-binfmts --enable qemu-arm
+        sudo systemctl start binfmt-support
+
+    - name: Install dependencies
+      run: sudo apt-get install -y build-essential gcc-aarch64-linux-gnu python3
+
+    - name: Run makee
+      run: |
+        export CC=aarch64-linux-gnu-gcc
+        make -C shake-a64 THASH=${{ matrix.thash }} clean
+        make -C shake-a64 THASH=${{ matrix.thash }} PARAMS=sphincs-shake-${{ matrix.size }}${{ matrix.option }} tests
+        make -C shake-a64 THASH=${{ matrix.thash }} PARAMS=sphincs-shake-${{ matrix.size }}${{ matrix.option }} test
+        make -C shake-a64 THASH=${{ matrix.thash }} PARAMS=sphincs-shake-${{ matrix.size }}${{ matrix.option }} PQCgenKAT_sign
+
+    - name: Run PQCgenKAT_sign
+      run: |
+        python3 vectors.py sphincs-shake-${{ matrix.size }}${{ matrix.option }}-${{ matrix.thash }} shake-a64
+        
+
